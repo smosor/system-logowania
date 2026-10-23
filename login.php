@@ -33,5 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         Hasło: <input type="password" name="password" required><br><br>
         <button type="submit">Zaloguj</button>
     </form>
+
+    <p>Nie masz konta? <a href="register.php">Zarejestruj się</a></p>
 </body>
 </html>
