@@ -1,8 +1,4 @@
 <?php
 session_start();
-if (isset($_SESSION['user_id'])) {
-    header('Location: panel.php');
-} else {
-    header('Location: login.php');
-}
-exit();
+header('Location: ' . (isset($_SESSION['user_id']) ? 'panel.php' : 'login.php'));
+exit;

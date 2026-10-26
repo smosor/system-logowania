@@ -1,22 +1,18 @@
 <?php
 session_start();
-if (isset($_SESSION['user_id'])) { header('Location: panel.php'); exit(); }
+if (isset($_SESSION['user_id'])) { header('Location: panel.php'); exit; }
 
 $blad = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require 'db.php';
-    
-    $stmt = mysqli_prepare($conn, 'SELECT id, password_hash FROM users WHERE username = ?');
-    mysqli_stmt_bind_param($stmt, 's', $_POST['username']);
-    mysqli_stmt_execute($stmt);
-    $user = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+    $user = mysqli_execute_query($conn, 'SELECT id, password_hash FROM users WHERE username = ?', [$_POST['username']])->fetch_assoc();
 
     if ($user && password_verify($_POST['password'], $user['password_hash'])) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $_POST['username'];
         header('Location: panel.php');
-        exit();
+        exit;
     }
     $blad = 'Błędny login lub hasło.';
 }
