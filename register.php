@@ -15,7 +15,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         try {
             $hash = password_hash($password, PASSWORD_DEFAULT);
-            mysqli_execute_query($conn, 'INSERT INTO users (username, password_hash) VALUES (?, ?)', [$username, $hash]);
+            $stmt = $conn->prepare(
+    'INSERT INTO users (username, password_hash) VALUES (?, ?)'
+);
+
+$stmt->bind_param('ss', $username, $hash);
+$stmt->execute();
+$stmt->close();
             $komunikat = 'Konto utworzone pomyślnie!';
         } catch (mysqli_sql_exception $e) {
             $blad = ($e->getCode() === 1062) ? 'Użytkownik o takim loginie już istnieje.' : 'Błąd rejestracji.';
